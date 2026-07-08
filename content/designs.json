@@ -9,7 +9,7 @@
       "moq": "20 m",
       "weight": "135-145 Gsm",
       "id": 1,
-      "real": true,
+      "real": false,
       "fabricType": "satin"
     },
     {
