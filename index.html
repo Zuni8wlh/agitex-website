@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGITEX — Fabric to Garment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#26374F;
+    --soga:#7A4B28;
+    --kapas:#FFFFFF;
+    --kunyit:#C4881E;
+    --ink:#2B2622;
+    --thread:#FFFFFF;
+    --card-bg:#F7F6F3;
+    --line:rgba(43,38,34,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--kapas);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:500; line-height:1.15;}
+
+  /* NAV */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(241,234,217,0.92); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{display:flex; align-items:center; justify-content:space-between; padding:18px 0;}
+  .logo{font-family:'Fraunces',serif; font-size:22px; font-weight:500; letter-spacing:0.02em; color:var(--indigo);}
+  .navlinks{display:flex; gap:32px; font-size:14px;}
+  .navlinks a{opacity:0.75; transition:opacity .2s;}
+  .navlinks a:hover{opacity:1;}
+  .navcta{background:var(--indigo); color:var(--thread); padding:10px 20px; border-radius:2px; font-size:13px; font-weight:500;}
+  .navtoggle{display:none; background:none; border:none; font-size:24px; cursor:pointer; color:var(--indigo);}
+
+  /* HERO */
+  .hero{padding-top:96px; padding-bottom:80px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;}
+  .hero .eyebrow-main{font-family:'Fraunces',serif; font-style:normal; font-weight:500; font-size:30px; line-height:1; letter-spacing:0.01em; color:var(--indigo); margin:0;}
+  .hero .eyebrow-sub{font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:14px; line-height:1; color:var(--soga); margin:4px 0 18px;}
+  .hero h1{font-size:44px; margin-bottom:20px; color:var(--indigo);}
+  .hero h1 em{font-style:italic; color:var(--kunyit);}
+  .hero p{font-size:16px; color:var(--ink); opacity:0.8; max-width:420px; margin-bottom:30px;}
+  .herobtns{display:flex; gap:14px;}
+  .btn-primary{background:var(--indigo); color:var(--thread); padding:13px 26px; border-radius:2px; font-size:14px; font-weight:500; border:none; cursor:pointer; display:inline-block;}
+  .btn-secondary{background:transparent; color:var(--indigo); padding:13px 26px; border-radius:2px; font-size:14px; font-weight:500; border:1px solid var(--indigo); cursor:pointer; display:inline-block;}
+
+  .stitchviz{position:relative; height:280px;}
+  .swatch,.garment{
+    position:absolute; width:140px; height:180px; background:var(--thread);
+    border:1px solid var(--line); border-radius:2px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--soga);
+    box-shadow:0 6px 16px rgba(43,38,34,0.08);
+  }
+  .swatch{left:0; top:20px; transform:rotate(-4deg);}
+  .garment{right:0; top:60px; transform:rotate(3deg);}
+  .stitchline{position:absolute; top:0; left:0; width:100%; height:100%;}
+  .stitchline path{
+    fill:none; stroke:var(--kunyit); stroke-width:2; stroke-dasharray:6 6;
+    stroke-dashoffset:400; stroke-linecap:round;
+    animation:draw 1.8s ease forwards .3s;
+  }
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  @media (prefers-reduced-motion:reduce){.stitchline path{animation:none; stroke-dashoffset:0;}}
+
+  /* SECTION LABEL */
+  .section{padding-top:70px; padding-bottom:70px;}
+  .section-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:36px; flex-wrap:wrap; gap:16px;}
+  .section-head h2{font-size:30px; color:var(--indigo);}
+  .section-head p{font-size:14px; opacity:0.7; max-width:380px;}
+
+  /* FILTERS */
+  .filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px;}
+  .chip{
+    font-size:13px; padding:8px 18px; border-radius:20px; border:1px solid var(--line);
+    background:var(--thread); cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif;
+  }
+  .chip:hover{border-color:var(--indigo);}
+  .chip.active{background:var(--indigo); color:var(--thread); border-color:var(--indigo);}
+
+  /* GALLERY - hang tag cards */
+  .gallery{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:32px 24px; padding-top:10px;}
+  .tag{
+    position:relative; background:var(--thread); border:1px solid var(--line);
+    border-radius:12px; overflow:hidden; cursor:pointer;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .tag:hover{transform:rotate(-1deg) translateY(-3px); box-shadow:0 10px 24px rgba(43,38,34,0.12);}
+  .tag::before{
+    content:''; position:absolute; top:14px; left:14px; width:10px; height:10px;
+    border:2px solid var(--kapas); border-radius:50%; background:var(--thread);
+    box-shadow:0 0 0 1.5px var(--soga); z-index:2;
+  }
+  .tagphoto{width:100%; height:230px; object-fit:cover; display:block; background:var(--kapas);}
+  .tagbody{padding:16px;}
+  .badge{
+    display:inline-block; font-family:'Inter',sans-serif; font-size:11px;
+    padding:2px 10px; border-radius:10px; margin-bottom:10px; font-weight:500;
+  }
+  .badge.real{background:#DDE7DC; color:#3C5E3F;}
+  .badge.ref{background:#F1DFC2; color:var(--soga);}
+  .tagbody h3{font-family:'Fraunces',serif; font-style:normal; font-weight:500; font-size:15px; color:var(--ink); margin-bottom:6px;}
+  .tagspec{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--soga); margin-bottom:8px;}
+  .tagprice{font-size:14px; font-weight:600;}
+
+  /* PROCESS */
+  .process{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+  .step{border-top:2px solid var(--indigo); padding-top:16px;}
+  .step .num{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--kunyit); margin-bottom:10px; display:block;}
+  .step h3{font-size:18px; margin-bottom:8px; color:var(--indigo);}
+  .step p{font-size:14px; opacity:0.75;}
+
+  /* FABRIC TYPES */
+  .fabrictypes{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px;}
+  .ftype{background:var(--thread); border:1px solid var(--line); padding:22px; border-radius:2px;}
+  .ftype h3{font-size:16px; margin-bottom:6px; color:var(--indigo);}
+  .ftype p{font-size:13px; opacity:0.7;}
+
+  /* CONTACT */
+  .contact{background:var(--indigo); color:var(--thread); border-radius:4px; padding:56px; display:grid; grid-template-columns:1fr 1fr; gap:48px;}
+  .contact h2{color:var(--thread); font-size:28px; margin-bottom:14px;}
+  .contact p{opacity:0.85; font-size:14px; margin-bottom:24px; max-width:360px;}
+  .contact-links a{display:block; font-size:14px; margin-bottom:10px; text-decoration:underline; opacity:0.9;}
+  .form-field{margin-bottom:14px;}
+  .form-field label{display:block; font-size:12px; margin-bottom:6px; opacity:0.8;}
+  .form-field input, .form-field textarea{
+    width:100%; padding:10px 12px; border:1px solid rgba(251,248,242,0.3); background:rgba(251,248,242,0.06);
+    color:var(--thread); border-radius:2px; font-family:'Inter',sans-serif; font-size:13px;
+  }
+  .form-field input::placeholder, .form-field textarea::placeholder{color:rgba(251,248,242,0.5);}
+  .form-field textarea{resize:vertical; min-height:70px;}
+  .form-submit{background:var(--kunyit); color:var(--ink); border:none; padding:12px 24px; border-radius:2px; font-size:13px; font-weight:600; cursor:pointer;}
+
+  /* FOOTER */
+  footer{padding:36px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:12px; opacity:0.6; flex-wrap:wrap; gap:10px;}
+
+  /* MODAL */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(43,38,34,0.55); z-index:100;
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--thread); max-width:640px; width:100%; border-radius:4px; overflow:hidden;
+    display:grid; grid-template-columns:1fr 1fr; max-height:88vh;
+  }
+  .modal img{width:100%; height:100%; object-fit:cover; display:block;}
+  .modal-body{padding:28px; overflow-y:auto;}
+  .modal-close{position:absolute; top:16px; right:16px; background:var(--thread); border:1px solid var(--line); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px;}
+  .modal-inner{position:relative;}
+  .modal-body h3{font-size:22px; font-style:italic; margin-bottom:10px; color:var(--indigo);}
+  .spec-table{width:100%; font-family:'IBM Plex Mono',monospace; font-size:12.5px; margin:16px 0;}
+  .spec-table tr td{padding:6px 0; border-bottom:1px solid var(--line);}
+  .spec-table tr td:first-child{color:var(--soga); width:44%;}
+  .modal-price{font-size:20px; font-weight:600; margin:14px 0;}
+
+  @media(max-width:820px){
+    .hero{grid-template-columns:1fr; padding:60px 0 50px;}
+    .stitchviz{margin-top:20px;}
+    .navlinks{position:fixed; top:66px; left:0; right:0; background:var(--kapas); flex-direction:column; padding:20px 32px; gap:16px; border-bottom:1px solid var(--line); display:none;}
+    .navlinks.open{display:flex;}
+    .navtoggle{display:block;}
+    .navcta{display:none;}
+    .process{grid-template-columns:1fr;}
+    .contact{grid-template-columns:1fr; padding:32px;}
+    .modal{grid-template-columns:1fr; max-height:90vh; overflow-y:auto;}
+    .modal img{width:100%; height:auto; aspect-ratio:3/4; object-fit:cover;}
+  }
+
+  @media(max-width:600px){
+    .wrap{padding:0 28px;}
+    .hero{padding-top:48px; padding-bottom:40px;}
+    .hero h1{font-size:32px;}
+    .section{padding-top:48px; padding-bottom:48px;}
+    .section-head h2{font-size:24px;}
+    .filters{gap:8px;}
+    .chip{padding:6px 14px; font-size:12px;}
+    .gallery{grid-template-columns:repeat(2, 1fr); gap:14px 10px;}
+    .tagphoto{height:140px;}
+    .tagbody{padding:10px;}
+    .tagbody h3{font-size:13px; margin-bottom:4px;}
+    .tagspec{font-size:10px; margin-bottom:5px;}
+    .tagprice{font-size:12px;}
+    .badge{font-size:10px; padding:2px 8px; margin-bottom:6px;}
+    .tag::before{width:8px; height:8px; top:10px; left:10px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <span class="logo">AGITEX</span>
+    <div class="navlinks" id="navlinks">
+      <a href="#gallery">Design gallery</a>
+      <a href="#fabrics">Fabric types</a>
+      <a href="#process">How to order</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="navcta">Get in touch</a>
+    <button class="navtoggle" id="navtoggle" aria-label="Toggle menu">&#9776;</button>
+  </nav>
+</header>
+
+<section class="wrap hero">
+  <div>
+    <p class="eyebrow-main">Fabric to Garment</p>
+    <p class="eyebrow-sub">a showcase</p>
+    <h1>How the <em>fabric</em> will look</h1>
+    <p>Every design here shows a finished result made from the fabric we supply. Contact us for full specifications and requirements.</p>
+    <div class="herobtns">
+      <a href="#gallery" class="btn-primary">Explore designs</a>
+      <a href="#fabrics" class="btn-secondary">See all fabrics</a>
+    </div>
+  </div>
+  <div class="stitchviz">
+    <svg class="stitchline" viewBox="0 0 400 280"><path d="M120,90 C220,20 250,180 300,150"/></svg>
+    <div class="swatch">Fabric roll<br>#AGI-51807</div>
+    <div class="garment" style="font-style:italic; font-family:'Fraunces',serif; color:var(--indigo);">Finished<br>garment</div>
+  </div>
+</section>
+
+<section class="wrap section" id="gallery">
+  <div class="section-head">
+    <div>
+      <h2>Design gallery</h2>
+      <p>Filter by fabric or garment type.<br>Click any piece to see the exact fabric spec and price.</p>
+    </div>
+  </div>
+
+  <div class="filters" id="filters">
+    <span class="chip active" data-filter="all">All</span>
+    <span class="chip" data-filter="cotton">Cotton</span>
+    <span class="chip" data-filter="linen">Linen</span>
+    <span class="chip" data-filter="denim">Denim</span>
+    <span class="chip" data-filter="satin">Satin</span>
+    <span class="chip" data-filter="rayon">Rayon</span>
+  </div>
+
+  <div class="gallery" id="gallery-grid"></div>
+</section>
+
+<section class="wrap section" id="process">
+  <div class="section-head">
+    <div>
+      <h2>How it works</h2>
+      <p>Three steps between browsing and getting fabric in hand.</p>
+    </div>
+  </div>
+  <div class="process">
+    <div class="step"><span class="num">01</span><h3>Choose a design</h3><p>Browse finished garments and pick the look closest to what you need.</p></div>
+    <div class="step"><span class="num">02</span><h3>Check the fabric spec</h3><p>Every design lists the exact fabric used — composition, weight, and price per meter.</p></div>
+    <div class="step"><span class="num">03</span><h3>Contact to order</h3><p>Reach out for a sample or place your order directly, retail or bulk.</p></div>
+  </div>
+</section>
+
+<section class="wrap section" id="fabrics">
+  <div class="section-head">
+    <div>
+      <h2>Fabric types</h2>
+      <p>Our current catalog, grouped by material.</p>
+    </div>
+  </div>
+  <div class="fabrictypes">
+    <div class="ftype"><h3>Cotton</h3><p>Combed and carded, 140–220 gsm. Best for shirts, dresses, everyday wear.</p></div>
+    <div class="ftype"><h3>Linen</h3><p>Breathable, textured, 180–230 gsm. Best for loose, warm-climate garments.</p></div>
+    <div class="ftype"><h3>Denim</h3><p>10–14oz, rigid or stretch. Best for jackets, trousers, structured pieces.</p></div>
+    <div class="ftype"><h3>Satin</h3><p>Smooth drape, 90–140 gsm. Best for eveningwear and linings.</p></div>
+    <div class="ftype"><h3>Rayon</h3><p>Soft fall, 120–160 gsm. Best for flowy dresses and blouses.</p></div>
+  </div>
+</section>
+
+<section class="wrap section" id="contact">
+  <div class="contact">
+    <div>
+      <h2>Talk to us about fabric</h2>
+      <p>Send a reference of what you want to make, we help you find the fabric that fits — retail meters or bulk rolls.</p>
+      <div class="contact-links">
+        <a href="https://wa.me/6280000000000" target="_blank" rel="noopener">WhatsApp — +62 800-0000-000</a>
+        <a href="mailto:hello@agitex.id">hello@agitex.id</a>
+      </div>
+    </div>
+    <form onsubmit="event.preventDefault(); alert('This is a mockup — no message was actually sent.');">
+      <div class="form-field"><label>Name</label><input type="text" placeholder="Your name" required></div>
+      <div class="form-field"><label>What are you making?</label><input type="text" placeholder="e.g. shirt collection, single dress"></div>
+      <div class="form-field"><label>Message</label><textarea placeholder="Quantity, timeline, fabric preference"></textarea></div>
+      <button class="form-submit" type="submit">Send inquiry</button>
+    </form>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>&copy; 2026 AGITEX. Fabric to garment.</span>
+  <span>This is a working mockup, not a live store.</span>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-inner">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-body">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <span class="badge" id="modalBadge"></span>
+      <h3 id="modalTitle"></h3>
+      <table class="spec-table" id="modalSpecs"></table>
+      <p class="modal-price" id="modalPrice"></p>
+      <a href="#contact" class="btn-primary" id="modalCta" style="display:inline-block;">Contact to order</a>
+    </div>
+  </div>
+</div>
+
+<script>
+<script>
+let designs = [];
+
+async function loadDesigns(){
+  try {
+    const res = await fetch('content/designs.json');
+    const data = await res.json();
+    designs = data.designs || [];
+  } catch(err) {
+    console.error('Could not load catalog data:', err);
+    designs = [];
+  }
+  renderGrid('all');
+}
+
+const grid = document.getElementById('gallery-grid');
+function renderGrid(filter){
+  grid.innerHTML = '';
+  designs
+    .filter(d => filter === 'all' || d.fabricType === filter)
+    .forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'tag';
+      card.innerHTML = `
+        <img class="tagphoto" src="${d.img}" alt="${d.name}">
+        <div class="tagbody">
+          <span class="badge ${d.real ? 'real' : 'ref'}">${d.real ? 'Real product' : 'Design reference'}</span>
+          <h3>${d.name}</h3>
+          <p class="tagspec">${d.fabricComposition} &middot; ${d.weight}</p>
+          <p class="tagprice">${d.price}</p>
+        </div>`;
+      card.addEventListener('click', () => openModal(d));
+      grid.appendChild(card);
+    });
+}
+loadDesigns();
+
+document.getElementById('filters').addEventListener('click', e => {
+  if(!e.target.classList.contains('chip')) return;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  e.target.classList.add('active');
+  renderGrid(e.target.dataset.filter);
+});
+
+const overlay = document.getElementById('modalOverlay');
+function openModal(d){
+  document.getElementById('modalImg').src = d.img;
+  document.getElementById('modalImg').alt = d.name;
+  document.getElementById('modalTitle').textContent = d.name;
+  document.getElementById('modalBadge').textContent = d.real ? 'Real product' : 'Design reference';
+  document.getElementById('modalBadge').className = 'badge ' + (d.real ? 'real' : 'ref');
+  document.getElementById('modalPrice').textContent = d.price;
+  const specsTable = document.getElementById('modalSpecs');
+  const specRows = {
+    "Fabric": d.fabricComposition,
+    "Weight": d.weight,
+    "Width": d.width,
+    "MOQ": d.moq
+  };
+  specsTable.innerHTML = Object.entries(specRows).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+  overlay.classList.add('open');
+}
+document.getElementById('modalClose').addEventListener('click', () => overlay.classList.remove('open'));
+overlay.addEventListener('click', e => { if(e.target === overlay) overlay.classList.remove('open'); });
+
+document.getElementById('navtoggle').addEventListener('click', () => {
+  document.getElementById('navlinks').classList.toggle('open');
+});
+</script>
+
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+if (window.netlifyIdentity) {
+  window.netlifyIdentity.on("init", user => {
+    if (!user) {
+      window.netlifyIdentity.on("login", () => {
+        document.location.href = "/admin/";
+      });
+    }
+  });
+}
+</script>
+</body>
+</html>

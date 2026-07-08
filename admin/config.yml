@@ -1,0 +1,38 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "designs"
+    label: "Katalog Desain"
+    files:
+      - file: "content/designs.json"
+        label: "Semua Desain"
+        name: "designs"
+        fields:
+          - label: "Daftar Desain"
+            name: "designs"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.fabricType}}"
+            fields:
+              - { label: "ID (angka unik, jangan diulang)", name: "id", widget: "number", value_type: "int" }
+              - { label: "Nama Desain", name: "name", widget: "string" }
+              - label: "Jenis Kain"
+                name: "fabricType"
+                widget: "select"
+                options:
+                  - { label: "Cotton", value: "cotton" }
+                  - { label: "Linen", value: "linen" }
+                  - { label: "Denim", value: "denim" }
+                  - { label: "Satin", value: "satin" }
+                  - { label: "Rayon", value: "rayon" }
+              - { label: "Produk Asli? (aktif = foto real, non-aktif = referensi desain)", name: "real", widget: "boolean", default: true }
+              - { label: "Foto", name: "img", widget: "image" }
+              - { label: "Komposisi Kain", name: "fabricComposition", widget: "string" }
+              - { label: "Berat Kain (gsm atau oz)", name: "weight", widget: "string" }
+              - { label: "Lebar Kain", name: "width", widget: "string" }
+              - { label: "MOQ (minimum order)", name: "moq", widget: "string" }
+              - { label: "Harga", name: "price", widget: "string" }

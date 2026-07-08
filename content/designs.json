@@ -1,0 +1,12 @@
+{
+  "designs": [
+    { "id": 1, "name": "Relaxed linen shirt", "fabricType": "linen", "real": true, "img": "https://picsum.photos/seed/agitex-shirt/500/620", "fabricComposition": "100% linen", "weight": "210 gsm", "width": "150 cm", "moq": "20 m", "price": "Rp 38,000 / m" },
+    { "id": 2, "name": "Cotton midi dress", "fabricType": "cotton", "real": false, "img": "https://picsum.photos/seed/agitex-dress/500/620", "fabricComposition": "Combed cotton", "weight": "180 gsm", "width": "145 cm", "moq": "15 m", "price": "Rp 29,000 / m" },
+    { "id": 3, "name": "Washed denim jacket", "fabricType": "denim", "real": true, "img": "https://picsum.photos/seed/agitex-jacket/500/620", "fabricComposition": "Denim, stretch", "weight": "12 oz", "width": "148 cm", "moq": "30 m", "price": "Rp 45,000 / m" },
+    { "id": 4, "name": "Satin slip dress", "fabricType": "satin", "real": false, "img": "https://picsum.photos/seed/agitex-satin/500/620", "fabricComposition": "Satin charmeuse", "weight": "110 gsm", "width": "140 cm", "moq": "15 m", "price": "Rp 41,000 / m" },
+    { "id": 5, "name": "Rayon flow blouse", "fabricType": "rayon", "real": true, "img": "https://picsum.photos/seed/agitex-blouse/500/620", "fabricComposition": "Viscose rayon", "weight": "140 gsm", "width": "150 cm", "moq": "15 m", "price": "Rp 27,000 / m" },
+    { "id": 6, "name": "Cotton twill trousers", "fabricType": "cotton", "real": false, "img": "https://picsum.photos/seed/agitex-trousers/500/620", "fabricComposition": "Cotton twill", "weight": "230 gsm", "width": "150 cm", "moq": "25 m", "price": "Rp 33,000 / m" },
+    { "id": 7, "name": "Linen wide trousers", "fabricType": "linen", "real": false, "img": "https://picsum.photos/seed/agitex-linenpants/500/620", "fabricComposition": "Linen blend", "weight": "195 gsm", "width": "148 cm", "moq": "20 m", "price": "Rp 36,000 / m" },
+    { "id": 8, "name": "Denim mini skirt", "fabricType": "denim", "real": true, "img": "https://picsum.photos/seed/agitex-skirt/500/620", "fabricComposition": "Denim, rigid", "weight": "11 oz", "width": "148 cm", "moq": "25 m", "price": "Rp 43,000 / m" }
+  ]
+}
